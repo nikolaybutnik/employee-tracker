@@ -1,6 +1,7 @@
 const mysql = require("mysql2/promise");
 const inquirer = require("inquirer");
 const functions = require("./assets/functions");
+const mysqlConnection = require("./assets/mysqlconnection");
 
 const DEPT_VIEW = "View departments";
 const DEPT_ADD = "Add departments";
@@ -28,13 +29,7 @@ async function main() {
 }
 
 async function connect() {
-  connection = await mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "example",
-    database: "employee_trackerDB",
-  });
+  connection = await mysql.createConnection(mysqlConnection);
   console.log(`Connected as id: ${connection.threadId}`);
 }
 

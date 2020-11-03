@@ -1,5 +1,10 @@
+const mysql = require("mysql2/promise");
+const mysqlConnection = require("./mysqlconnection");
+
 async function addEmployee() {
-  console.log("Let's add an employee!");
+  connection = await mysql.createConnection(mysqlConnection);
+  const [roles] = await connection.query("SELECT title FROM role");
+  console.log(roles);
 }
 
 module.exports = {
