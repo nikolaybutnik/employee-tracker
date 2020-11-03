@@ -2,6 +2,7 @@ const mysql = require("mysql2/promise");
 const inquirer = require("inquirer");
 const functions = require("./assets/functions");
 const mysqlConnection = require("./assets/mysqlconnection");
+const cTable = require("console.table");
 
 const DEPT_VIEW = "View departments";
 const DEPT_ADD = "Add departments";
