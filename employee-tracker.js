@@ -33,6 +33,8 @@ async function connect() {
   console.log(`Connected as id: ${connection.threadId}`);
 }
 
+let loop = true;
+
 async function runInquirer() {
   return inquirer
     .prompt([
