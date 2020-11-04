@@ -93,6 +93,44 @@ async function addEmployee() {
     });
 }
 
+async function deleteEmployee() {
+  connection = await mysql.createConnection(mysqlConnection);
+  const [employees] = await connection.query(
+    "SELECT first_name, last_name FROM employee"
+  );
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the first name of the emoloyee you want to delete?",
+        name: "firstName",
+      },
+      {
+        type: "input",
+        message: "What is the last name of the emoloyee you want to delete?",
+        name: "lastName",
+      },
+    ])
+    .then(async function (response) {
+      if (
+        employees.some(
+          (employee) => employee.first_name === response.firstName
+        ) &&
+        employees.some((employee) => employee.last_name === response.lastName)
+      ) {
+        const [
+          deleteRow,
+        ] = await connection.query("DELETE FROM employee WHERE ? and ?", [
+          { first_name: response.firstName },
+          { last_name: response.lastName },
+        ]);
+        console.log(`${deleteRow.affectedRows} employee has been deleted.`);
+      } else {
+        console.log("Employee does not exist.");
+      }
+    });
+}
+
 async function viewDepartments() {
   connection = await mysql.createConnection(mysqlConnection);
   const [departments] = await connection.query("SELECT * FROM department");
@@ -112,4 +150,5 @@ module.exports = {
   viewEmployees,
   viewDepartments,
   viewRoles,
+  deleteEmployee,
 };

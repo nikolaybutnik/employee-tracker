@@ -84,8 +84,7 @@ async function runInquirer() {
         case EMP_ADD:
           return functions.addEmployee();
         case EMP_DEL:
-          console.log(`You have selected ${userResponse}`);
-          break;
+          return functions.deleteEmployee();
         case EMP_UPD:
           console.log(`You have selected ${userResponse}`);
           break;
