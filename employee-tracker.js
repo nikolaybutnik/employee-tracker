@@ -19,9 +19,12 @@ let connection;
 main();
 
 async function main() {
+  let loop = true;
   try {
     await connect();
-    await runInquirer();
+    while (loop) {
+      await runInquirer();
+    }
   } catch (error) {
     console.error(error);
   } finally {
@@ -79,11 +82,9 @@ async function runInquirer() {
           console.log(`You have selected ${userResponse}`);
           break;
         case EMP_VIEW:
-          console.log(`You have selected ${userResponse}`);
-          break;
+          return functions.viewEmployees();
         case EMP_ADD:
-          functions.addEmployee();
-          break;
+          return functions.addEmployee();
         case EMP_DEL:
           console.log(`You have selected ${userResponse}`);
           break;
