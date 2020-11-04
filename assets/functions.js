@@ -10,16 +10,7 @@ async function viewEmployees() {
   );
   // Displays employee data from different tables
   const [employeeData] = await connection.query(
-    `(SELECT 
-        employee.id, 
-        employee.first_name, 
-        employee.last_name, 
-        role.title, 
-        department.name AS department, 
-        role.salary 
-      FROM employee 
-      INNER JOIN role ON (employee.role_id = role.id) 
-      INNER JOIN department ON (department.id = role.department_id)`
+    "(SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary FROM employee INNER JOIN role ON (employee.role_id = role.id) INNER JOIN department ON (department.id = role.department_id))"
   );
   // CONCAT(employee.first_name, ' ', employee.last_name) AS manager
   console.table(employeeData);
@@ -106,7 +97,14 @@ async function addEmployee() {
     });
 }
 
+async function viewDepartments() {
+  connection = await mysql.createConnection(mysqlConnection);
+  const [departments] = await connection.query("SELECT * FROM department");
+  console.table(departments);
+}
+
 module.exports = {
   addEmployee,
   viewEmployees,
+  viewDepartments,
 };

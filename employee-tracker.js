@@ -64,8 +64,7 @@ async function runInquirer() {
       const userResponse = await response.operation;
       switch (userResponse) {
         case DEPT_VIEW:
-          console.log(`You have selected ${userResponse}`);
-          break;
+          return functions.viewDepartments();
         case DEPT_ADD:
           console.log(`You have selected ${userResponse}`);
           break;
