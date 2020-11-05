@@ -21,7 +21,7 @@ A command line application that uses databases to keep track of and organize dat
 
 ## Installation
 
-Run `npm install` to install all dependencies required to run this application. Navigate to `./assets/mysql` folder and open `schema.sql` with a database development tool. Run the code in the file to create the database and populate it with tables. As an option, run the code in `seed.sql` to populate the database with placeholder entries.
+Run `npm install` to install all dependencies required to run this application. Navigate to `./assets/mysql` folder and open `schema.sql` with a database development tool. Run the code in the file to create the database and populate it with tables. As an option, run the code in `seed.sql` to populate the database with placeholder entries. Navigate to the `./assets` folder and ensure that `host`, `port`, `user`, `password` and `database` fields inside the `mysqlconnection.js` file match your database information.
 
 ## Usage
 
