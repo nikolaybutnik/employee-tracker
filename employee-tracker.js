@@ -66,7 +66,7 @@ async function runInquirer() {
         case DEPT_VIEW:
           return functions.viewDepartments();
         case DEPT_ADD:
-          console.log(`You have selected ${userResponse}`);
+          return functions.addDepartment();
           break;
         case DEPT_DEL:
           console.log(`You have selected ${userResponse}`);

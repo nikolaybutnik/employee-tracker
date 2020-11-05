@@ -137,6 +137,43 @@ async function viewDepartments() {
   console.table(departments);
 }
 
+async function addDepartment() {
+  connection = await mysql.createConnection(mysqlConnection);
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the name of department you wish to add?",
+        name: "departmentName",
+      },
+    ])
+    .then(async function (response) {
+      const [
+        newDepartment,
+      ] = await connection.query("INSERT INTO department (name) VALUES (?)", [
+        response.departmentName,
+      ]);
+      console.log(`${response.departmentName} has been added.`);
+    });
+}
+
+// async function deleteDepartment() {
+//   connection = await mysql.createConnection(mysqlConnection);
+//   const [departments] = await connection.query("SELECT * FROM department");
+//   return inquirer
+//     .prompt([
+//       {
+//         type: "list",
+//         message: "What is the first name of the emoloyee you want to delete?",
+//         name: "choiceDepartment",
+//         choices: departments,
+//       },
+//     ])
+//     .then(async function (response) {
+//       console.log(response.choiceDepartment);
+//     });
+// }
+
 async function viewRoles() {
   connection = await mysql.createConnection(mysqlConnection);
   const [roles] = await connection.query(
@@ -151,4 +188,5 @@ module.exports = {
   viewDepartments,
   viewRoles,
   deleteEmployee,
+  addDepartment,
 };
