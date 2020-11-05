@@ -72,8 +72,7 @@ async function runInquirer() {
         case ROLE_VIEW:
           return functions.viewRoles();
         case ROLE_ADD:
-          console.log(`You have selected ${userResponse}`);
-          break;
+          return functions.addRole();
         case ROLE_DEL:
           console.log(`You have selected ${userResponse}`);
           break;

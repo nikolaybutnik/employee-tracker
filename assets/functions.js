@@ -187,6 +187,42 @@ async function viewRoles() {
   console.table(roles);
 }
 
+async function addRole() {
+  connection = await mysql.createConnection(mysqlConnection);
+  const [departments] = await connection.query("SELECT * FROM department");
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the name of role you wish to add?",
+        name: "roleName",
+      },
+      {
+        type: "input",
+        message: "Enter the salary for this role to two decimal places.",
+        name: "roleSalary",
+      },
+      {
+        type: "list",
+        message: "Which department does this role belong to?",
+        name: "roleDepartment",
+        choices: departments,
+      },
+    ])
+    .then(async function (response) {
+      const departmentId = departments.find(
+        (element) => element.name === response.roleDepartment
+      ).id;
+      const [
+        newRole,
+      ] = await connection.query(
+        "INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?);",
+        [response.roleName, response.roleSalary, departmentId]
+      );
+      console.log(`${response.roleName} has been added.`);
+    });
+}
+
 module.exports = {
   addEmployee,
   viewEmployees,
@@ -195,4 +231,5 @@ module.exports = {
   deleteEmployee,
   addDepartment,
   deleteDepartment,
+  addRole,
 };
