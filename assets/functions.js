@@ -244,6 +244,49 @@ async function deleteRole() {
     });
 }
 
+async function changeRole() {
+  connection = await mysql.createConnection(mysqlConnection);
+  const [employees] = await connection.query(
+    "SELECT first_name, last_name FROM employee"
+  );
+  const employeesArr = employees.map(
+    (element) => element.first_name + " " + element.last_name
+  );
+  const [roles] = await connection.query("SELECT id, title FROM role");
+  const rolesArr = roles.map((element) => element.title);
+  return inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Whose role do you wish to update?",
+        name: "employeeName",
+        choices: employeesArr,
+      },
+      {
+        type: "list",
+        message: "Which role do you wish to assign this employee?",
+        name: "roleName",
+        choices: rolesArr,
+      },
+    ])
+    .then(async function (response) {
+      const roleId = roles.find(
+        (element) => element.title === response.roleName
+      ).id;
+      const [
+        update,
+      ] = await connection.query(
+        "UPDATE employee SET role_id = ? WHERE first_name = ? AND last_name = ?",
+        [
+          roleId,
+          response.employeeName.split(" ")[0],
+          response.employeeName.split(" ")[1],
+        ]
+      );
+      console.log("Employee role has been updated.");
+    });
+}
+
 async function exitLoop() {
   connection = await mysql.createConnection(mysqlConnection);
   console.log("Thanks for using the employee tracker!");
@@ -262,4 +305,5 @@ module.exports = {
   addRole,
   deleteRole,
   exitLoop,
+  changeRole,
 };

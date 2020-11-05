@@ -82,8 +82,7 @@ async function runInquirer() {
         case EMP_DEL:
           return functions.deleteEmployee();
         case EMP_UPD:
-          console.log(`You have selected ${userResponse}`);
-          break;
+          return functions.changeRole();
         case EXIT:
           return functions.exitLoop();
       }
