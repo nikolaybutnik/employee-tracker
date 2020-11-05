@@ -223,6 +223,27 @@ async function addRole() {
     });
 }
 
+async function deleteRole() {
+  connection = await mysql.createConnection(mysqlConnection);
+  const [roles] = await connection.query("SELECT title FROM role");
+  const rolesArr = roles.map((element) => element.title);
+  return inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Which role do you wish to delete?",
+        name: "deleteRole",
+        choices: rolesArr,
+      },
+    ])
+    .then(async function (response) {
+      const [deleteRow] = await connection.query("DELETE FROM role WHERE ?", [
+        { title: response.deleteRole },
+      ]);
+      console.log(`${deleteRow.affectedRows} role has been deleted.`);
+    });
+}
+
 module.exports = {
   addEmployee,
   viewEmployees,
@@ -232,4 +253,5 @@ module.exports = {
   addDepartment,
   deleteDepartment,
   addRole,
+  deleteRole,
 };
