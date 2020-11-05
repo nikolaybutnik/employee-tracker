@@ -286,6 +286,73 @@ async function changeRole() {
     });
 }
 
+async function changeManager() {
+  connection = await mysql.createConnection(mysqlConnection);
+  const [employees] = await connection.query("SELECT * FROM employee");
+  const employeesArr = employees.map(
+    (element) => element.first_name + " " + element.last_name
+  );
+  const managersArr = employees.map(
+    (element) => element.first_name + " " + element.last_name
+  );
+  managersArr.push("No manager");
+  return inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Which employee do you wish to assign a new manager to?",
+        name: "employeeName",
+        choices: employeesArr,
+      },
+      {
+        type: "list",
+        message: "Which manager do you wish to assign this employee?",
+        name: "managerName",
+        choices: managersArr,
+      },
+    ])
+    .then(async function (response) {
+      const [managerId] = await connection.query(
+        "SELECT id FROM employee WHERE ? AND ?",
+        [
+          {
+            first_name: response.managerName.split(" ")[0],
+          },
+          {
+            last_Name: response.managerName.split(" ")[1],
+          },
+        ]
+      );
+      if (response.employeeName === response.managerName) {
+        console.log("You cannot assign an employee as their own manager.");
+      } else if (response.managerName === "No manager") {
+        const [
+          newManager,
+        ] = await connection.query(
+          "UPDATE employee SET manager_id = ? WHERE first_name = ? AND last_name = ?",
+          [
+            undefined,
+            response.employeeName.split(" ")[0],
+            response.employeeName.split(" ")[1],
+          ]
+        );
+        console.log("Manager has been removed.");
+      } else {
+        const [
+          newManager,
+        ] = await connection.query(
+          "UPDATE employee SET manager_id = ? WHERE first_name = ? AND last_name = ?",
+          [
+            managerId[0].id,
+            response.employeeName.split(" ")[0],
+            response.employeeName.split(" ")[1],
+          ]
+        );
+        console.log("Manager has been assigned.");
+      }
+    });
+}
+
 async function exitLoop() {
   connection = await mysql.createConnection(mysqlConnection);
   console.log("Thanks for using the employee tracker!");
@@ -305,4 +372,5 @@ module.exports = {
   deleteRole,
   exitLoop,
   changeRole,
+  changeManager,
 };

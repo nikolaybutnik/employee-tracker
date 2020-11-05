@@ -13,7 +13,8 @@ const ROLE_DEL = "Delete roles";
 const EMP_VIEW = "View employees";
 const EMP_ADD = "Add employees";
 const EMP_DEL = "Delete employees";
-const EMP_UPD = "Change employee role";
+const ROLE_UPD = "Change employee role";
+const MGR_UPD = "Reassign manager";
 const EXIT = "Exit";
 
 let connection;
@@ -55,7 +56,8 @@ async function runInquirer() {
           EMP_VIEW,
           EMP_ADD,
           EMP_DEL,
-          EMP_UPD,
+          ROLE_UPD,
+          MGR_UPD,
           EXIT,
         ],
       },
@@ -81,8 +83,10 @@ async function runInquirer() {
           return functions.addEmployee();
         case EMP_DEL:
           return functions.deleteEmployee();
-        case EMP_UPD:
+        case ROLE_UPD:
           return functions.changeRole();
+        case MGR_UPD:
+          return functions.changeManager();
         case EXIT:
           return functions.exitLoop();
       }
