@@ -1,9 +1,11 @@
+// Load all dependencies.
 const mysql = require("mysql2/promise");
 const inquirer = require("inquirer");
 const functions = require("./assets/functions");
 const mysqlConnection = require("./assets/mysqlconnection");
 const cTable = require("console.table");
 
+// Assign user choices to variables to be used in inquirer and switch statement.
 const DEPT_VIEW = "View departments";
 const DEPT_ADD = "Add departments";
 const DEPT_DEL = "Delete departments";
@@ -17,9 +19,11 @@ const ROLE_UPD = "Change employee role";
 const MGR_UPD = "Reassign manager";
 const EXIT = "Exit";
 
+// Define a connection variable and initialize the application.
 let connection;
 main();
 
+// connect to database and loop the inquirer function to ask the user for input every time a function finishes executing.
 async function main() {
   let loop = true;
   try {
@@ -34,11 +38,14 @@ async function main() {
   }
 }
 
+// Set up a connection to database
 async function connect() {
   connection = await mysql.createConnection(mysqlConnection);
   console.log(`Connected as id: ${connection.threadId}`);
 }
 
+// Set up inquirer to ask the initial set of questions. Each response will branch out into a separate function in the functions.js file.
+// The functions return promises, thus a return statement is used instead of a break for each case to resolve each promise.
 async function runInquirer() {
   return inquirer
     .prompt([
