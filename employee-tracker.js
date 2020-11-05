@@ -85,7 +85,7 @@ async function runInquirer() {
           console.log(`You have selected ${userResponse}`);
           break;
         case EXIT:
-          break;
+          return functions.exitLoop();
       }
     });
 }

@@ -244,6 +244,13 @@ async function deleteRole() {
     });
 }
 
+async function exitLoop() {
+  connection = await mysql.createConnection(mysqlConnection);
+  console.log("Thanks for using the employee tracker!");
+  connection.end();
+  process.exit();
+}
+
 module.exports = {
   addEmployee,
   viewEmployees,
@@ -254,4 +261,5 @@ module.exports = {
   deleteDepartment,
   addRole,
   deleteRole,
+  exitLoop,
 };
