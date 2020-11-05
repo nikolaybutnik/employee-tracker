@@ -157,22 +157,27 @@ async function addDepartment() {
     });
 }
 
-// async function deleteDepartment() {
-//   connection = await mysql.createConnection(mysqlConnection);
-//   const [departments] = await connection.query("SELECT * FROM department");
-//   return inquirer
-//     .prompt([
-//       {
-//         type: "list",
-//         message: "What is the first name of the emoloyee you want to delete?",
-//         name: "choiceDepartment",
-//         choices: departments,
-//       },
-//     ])
-//     .then(async function (response) {
-//       console.log(response.choiceDepartment);
-//     });
-// }
+async function deleteDepartment() {
+  connection = await mysql.createConnection(mysqlConnection);
+  const [departments] = await connection.query("SELECT * FROM department");
+  return inquirer
+    .prompt([
+      {
+        type: "list",
+        message: "Which department do you wish to delete?",
+        name: "deleteDepartment",
+        choices: departments,
+      },
+    ])
+    .then(async function (response) {
+      const [
+        deleteRow,
+      ] = await connection.query("DELETE FROM department WHERE ?", [
+        { name: response.deleteDepartment },
+      ]);
+      console.log(`${deleteRow.affectedRows} department has been deleted.`);
+    });
+}
 
 async function viewRoles() {
   connection = await mysql.createConnection(mysqlConnection);
@@ -189,4 +194,5 @@ module.exports = {
   viewRoles,
   deleteEmployee,
   addDepartment,
+  deleteDepartment,
 };

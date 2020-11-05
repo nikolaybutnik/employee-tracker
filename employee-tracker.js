@@ -14,6 +14,7 @@ const EMP_VIEW = "View employees";
 const EMP_ADD = "Add employees";
 const EMP_DEL = "Delete employees";
 const EMP_UPD = "Change employee role";
+const EXIT = "Exit";
 
 let connection;
 main();
@@ -37,8 +38,6 @@ async function connect() {
   console.log(`Connected as id: ${connection.threadId}`);
 }
 
-let loop = true;
-
 async function runInquirer() {
   return inquirer
     .prompt([
@@ -57,6 +56,7 @@ async function runInquirer() {
           EMP_ADD,
           EMP_DEL,
           EMP_UPD,
+          EXIT,
         ],
       },
     ])
@@ -67,10 +67,8 @@ async function runInquirer() {
           return functions.viewDepartments();
         case DEPT_ADD:
           return functions.addDepartment();
-          break;
         case DEPT_DEL:
-          console.log(`You have selected ${userResponse}`);
-          break;
+          return functions.deleteDepartment();
         case ROLE_VIEW:
           return functions.viewRoles();
         case ROLE_ADD:
@@ -87,6 +85,8 @@ async function runInquirer() {
           return functions.deleteEmployee();
         case EMP_UPD:
           console.log(`You have selected ${userResponse}`);
+          break;
+        case EXIT:
           break;
       }
     });
