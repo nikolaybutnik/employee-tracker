@@ -1,5 +1,4 @@
 // Dependencies for functions used in this file
-const mysql = require("mysql2/promise");
 const connection = require("./mysqlconnection");
 const inquirer = require("inquirer");
 

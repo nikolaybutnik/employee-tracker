@@ -1,5 +1,4 @@
 // Load all dependencies.
-const mysql = require("mysql2/promise");
 const inquirer = require("inquirer");
 const functions = require("./assets/functions");
 const connection = require("./assets/mysqlconnection");
