@@ -2,7 +2,7 @@
 const mysql = require("mysql2/promise");
 const inquirer = require("inquirer");
 const functions = require("./assets/functions");
-const mysqlConnection = require("./assets/mysqlconnection");
+const connection = require("./assets/mysqlconnection");
 const cTable = require("console.table");
 
 // Assign user choices to variables to be used in inquirer and switch statement.
@@ -19,8 +19,7 @@ const ROLE_UPD = "Change employee role";
 const MGR_UPD = "Reassign manager";
 const EXIT = "Exit";
 
-// Define a connection variable and initialize the application.
-let connection;
+// Initialize the application.
 main();
 
 // connect to database and loop the inquirer function to ask the user for input every time a function finishes executing.
@@ -40,8 +39,7 @@ async function main() {
 
 // Set up a connection to database
 async function connect() {
-  connection = await mysql.createConnection(mysqlConnection);
-  console.log(`Connected as id: ${connection.threadId}`);
+  console.log(`Connected to database`);
 }
 
 // Set up inquirer to ask the initial set of questions. Each response will branch out into a separate function in the functions.js file.

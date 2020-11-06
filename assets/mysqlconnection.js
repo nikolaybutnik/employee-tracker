@@ -1,3 +1,6 @@
+// Load dependency
+const mysql = require("mysql2");
+
 // Connection details to connect to mysql2. Export to be used in employee-tracker.js and functions.js.
 const mysqlConnection = {
   host: "localhost",
@@ -7,4 +10,6 @@ const mysqlConnection = {
   database: "employee_trackerDB",
 };
 
-module.exports = mysqlConnection;
+let connection = mysql.createConnection(mysqlConnection);
+
+module.exports = connection.promise();

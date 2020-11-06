@@ -1,11 +1,10 @@
 // Dependencies for functions used in this file
 const mysql = require("mysql2/promise");
-const mysqlConnection = require("./mysqlconnection");
+const connection = require("./mysqlconnection");
 const inquirer = require("inquirer");
 
 // Display all relevant data to the user about every employee in the database using a series of JOIN statement to JOIN columns from multiple tables.
 async function viewEmployees() {
-  connection = await mysql.createConnection(mysqlConnection);
   const [employeeData] = await connection.query(
     "SELECT employee.id, employee.first_name, employee.last_name, role.title, department.name AS department, role.salary, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee LEFT JOIN role ON (employee.role_id = role.id) LEFT JOIN department ON (department.id = role.department_id) LEFT JOIN employee manager ON (manager.id = employee.manager_id);"
   );
@@ -18,7 +17,6 @@ async function viewEmployees() {
 // Save the user's responses as variables and use the variables to INSERT the data into database.
 // INSERT statements will vary slightly depending on whether a manager is being added or not.
 async function addEmployee() {
-  connection = await mysql.createConnection(mysqlConnection);
   const [roles] = await connection.query("SELECT title FROM role");
   const rolesArr = roles.map((element) => element.title);
   const [employees] = await connection.query(
@@ -98,7 +96,6 @@ async function addEmployee() {
 // Collect the employee's first name and last name as manual inputs from the user. Match the first and last name to records in database using array.find() method.
 // If the employee does not exist in the database, alert the user. Otherwise, proceed to DELETE the employee row from the database.
 async function deleteEmployee() {
-  connection = await mysql.createConnection(mysqlConnection);
   const [employees] = await connection.query(
     "SELECT first_name, last_name FROM employee"
   );
@@ -137,7 +134,6 @@ async function deleteEmployee() {
 
 // Function that displays all departments to the user.
 async function viewDepartments() {
-  connection = await mysql.createConnection(mysqlConnection);
   const [departments] = await connection.query("SELECT * FROM department");
   console.table(departments);
 }
@@ -145,7 +141,6 @@ async function viewDepartments() {
 // Function that adds a new department to the database.
 // Prompt the user to input the name of the new department and hold it as a variable. Use the variable to INSERT the data into the relevant table.
 async function addDepartment() {
-  connection = await mysql.createConnection(mysqlConnection);
   return inquirer
     .prompt([
       {
@@ -168,7 +163,6 @@ async function addDepartment() {
 // Create array of departments and present as list for user to select from. Hold the user's choice as a variable.
 // Use the variable in a DELETE statement to remove the relevant row from a relevant table in the database.
 async function deleteDepartment() {
-  connection = await mysql.createConnection(mysqlConnection);
   const [departments] = await connection.query("SELECT * FROM department");
   return inquirer
     .prompt([
@@ -191,7 +185,6 @@ async function deleteDepartment() {
 
 // Function that displays all the current roles and relevant data to the user.
 async function viewRoles() {
-  connection = await mysql.createConnection(mysqlConnection);
   const [roles] = await connection.query(
     "SELECT title, salary, name AS department FROM role, department WHERE department.id = role.department_id"
   );
@@ -203,7 +196,6 @@ async function viewRoles() {
 // Obtain the department ID number from the name of the department that the user selected.
 // INSERT the data into the relevant table in the database.
 async function addRole() {
-  connection = await mysql.createConnection(mysqlConnection);
   const [departments] = await connection.query("SELECT * FROM department");
   return inquirer
     .prompt([
@@ -241,7 +233,6 @@ async function addRole() {
 // Function that deletes an existing role from the database.
 // Create an array of roles for present to user as a list ot select from. Use the selection in a DELETE statement to remove the relevant row from database.
 async function deleteRole() {
-  connection = await mysql.createConnection(mysqlConnection);
   const [roles] = await connection.query("SELECT title FROM role");
   const rolesArr = roles.map((element) => element.title);
   return inquirer
@@ -266,7 +257,6 @@ async function deleteRole() {
 // Use the user's reponse to find the ID number of the new role using the array.find() method.
 // UPDATE the database with the user's selections.
 async function changeRole() {
-  connection = await mysql.createConnection(mysqlConnection);
   const [employees] = await connection.query(
     "SELECT first_name, last_name FROM employee"
   );
@@ -313,7 +303,6 @@ async function changeRole() {
 // Assign user's selections to variables. Use the variables to UPDATE the database.
 // SET manager_id to undefined if no manager is needed. Alert the user if they try to assign an employee as manager to themselves.
 async function changeManager() {
-  connection = await mysql.createConnection(mysqlConnection);
   const [employees] = await connection.query("SELECT * FROM employee");
   const employeesArr = employees.map(
     (element) => element.first_name + " " + element.last_name
@@ -381,7 +370,6 @@ async function changeManager() {
 
 // Function that exits the program.
 async function exitLoop() {
-  connection = await mysql.createConnection(mysqlConnection);
   console.log("Thanks for using the employee tracker!");
   connection.end();
   process.exit();
